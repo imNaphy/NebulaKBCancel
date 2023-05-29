@@ -1,0 +1,4 @@
+name: NebulaKBCancel
+version: '${project.version}'
+main: me.naphy.NebulaKBCancel
+api-version: 1.19
