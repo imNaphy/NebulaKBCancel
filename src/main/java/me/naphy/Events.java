@@ -37,9 +37,19 @@ public class Events implements Listener {
         }
         */
         if (event.isCancelled()) {
-            Location loc = event.getEntity().getLocation();
+            Location initialLoc = event.getEntity().getLocation();
+            // Daca jucatorul este in aer si se duce in sus, dar este lovit, se va duce in jos de-acum :/
+            // Daca jucatorul este in aer si se duce in jos, se va duce in continuare in jos
+            // Yaw si pitch-ul nu se vor schimba
             Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(NebulaKBCancel.plugin, () -> {
-                event.getEntity().teleport(loc);
+                Location newLoc = new Location(initialLoc.getWorld(), initialLoc.getX(), event.getEntity().getLocation().getY(), initialLoc.getZ(), event.getEntity().getLocation().getYaw(), event.getEntity().getLocation().getPitch());
+                if (newLoc.getY() > initialLoc.getY()) {
+                    newLoc.setY(initialLoc.getY());
+                    event.getEntity().teleport(newLoc);
+                }
+                else {
+                    event.getEntity().teleport(newLoc);
+                }
             }, 1);
         }
     }
